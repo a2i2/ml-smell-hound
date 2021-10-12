@@ -8,7 +8,7 @@
 # Source: https://github.com/boalang/MSR19-DataShowcase/blob/master/info.txt
 ml_imports = [
     "theano",
-    "pytroch",
+    "pytorch", # Corrected typo "pytroch" in MSR19 info.txt
     "caffe",
     "keras",
     "tensorflow",
