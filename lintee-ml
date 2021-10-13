@@ -1,3 +1,3 @@
 #!/bin/bash
-CONFIG=`python3 main.py $1 ml`
+CONFIG=`python3 ${BASH_SOURCE%/*}/main.py $1 ml`
 pylint "$@" --rcfile=$CONFIG
