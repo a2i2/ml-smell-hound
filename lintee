@@ -1,0 +1,4 @@
+#!/bin/bash
+${BASH_SOURCE%/*}/lintee-context-all "$@" > lint-context.txt
+${BASH_SOURCE%/*}/lintee-ml-all "$@" > lint-ml.txt
+${BASH_SOURCE%/*}/lintee-non-ml-all "$@" > lint-non-ml.txt
