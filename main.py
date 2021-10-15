@@ -4,6 +4,8 @@ import glob
 import json
 from datetime import datetime
 from shell_util import *
+from operations.reprioritise import Reprioritise
+from operations.remessage import Remessage
 
 # Source: https://github.com/boalang/MSR19-DataShowcase/blob/master/info.txt
 ml_imports = [
@@ -86,8 +88,6 @@ class Runner:
     def process_file(self, file_path: str):
         # Process each file individually, which will:
         #   1. run pylint on that file based upon context with JSON output.
-        #   2. run operations on the file.
-        #   3. finally transform the json output to text.
         base_path, file_name = os.path.split(file_path)
 
         if self.metamodel == "non_ml":
@@ -103,12 +103,22 @@ class Runner:
             )
 
         cmd = f"pylint --rcfile={config_path} -f json {file_path}"
-        with open(
-            os.path.join(self.output_path, f"{file_name}{output_suffix}"), "w"
-        ) as outfile:
-            get_command_output(cmd, stdout=outfile)
-        # json_data = json.loads(output)
-        # print(json_data)
+        print("Executing command:", cmd)
+
+        output_location = os.path.join(self.output_path, f"{file_name}{output_suffix}")
+        with open(output_location, "w") as out_file:
+            get_command_output(cmd, stdout=out_file)
+            # json_data = json.loads(output)
+            # print(json_data)
+
+            #   2. Run operations on the file.
+            #   2.1 Reprioritise
+            Reprioritise.exec(output_location)
+
+            #   2.2 Remessage
+            # Remessage.exec(output_location)
+
+            #   3. Finally transform the json output to text.
 
     def exec(self):
 
