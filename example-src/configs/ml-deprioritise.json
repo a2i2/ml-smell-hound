@@ -1,0 +1,10 @@
+[
+  "bad-indentation",
+  "trailing-whitespace",
+  "wrong-import-position",
+  "bad-whitespace",
+  "ungrouped-imports",
+  "trailing-newlines",
+  "reimported"
+]
+
