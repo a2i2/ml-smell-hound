@@ -78,10 +78,11 @@ class Runner:
     def __init__(self, dir_path: str, metamodel: str):
         self.dir_path = dir_path
         self.metamodel = metamodel
-        self.ml_config_path = os.path.join(dir_path, "configs/ml.pylintrc")
-        self.non_ml_config_path = os.path.join(dir_path, "configs/non_ml.pylintrc")
-
         script_dir = os.path.dirname(os.path.realpath(__file__))
+        
+        self.ml_config_path = os.path.join(script_dir, "configs/ml.pylintrc")
+        self.non_ml_config_path = os.path.join(script_dir, "configs/non_ml.pylintrc")
+
         time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         self.output_path = os.path.join(script_dir, "outputs", time)
         os.makedirs(self.output_path, mode=0o755)
