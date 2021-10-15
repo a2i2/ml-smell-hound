@@ -116,7 +116,7 @@ class Runner:
             Reprioritise.exec(output_location)
 
             #   2.2 Remessage
-            # Remessage.exec(output_location)
+            Remessage.exec(output_location)
 
             #   3. Finally transform the json output to text.
 
