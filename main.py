@@ -126,6 +126,9 @@ class Runner:
         with open(output_location, "r") as json_file:
             json_array = json.load(json_file)
 
+            if len(json_array) is 0:
+                return
+
             lines.append(f'************* Module {json_array[0]["module"]}\n')
             for obj in json_array:
                 lines.append(
