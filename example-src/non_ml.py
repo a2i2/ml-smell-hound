@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # Source: simplecaesar.py from https://pylint.pycqa.org/en/latest/tutorial.html.
 
 import string;
