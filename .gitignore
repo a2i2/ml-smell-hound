@@ -1,2 +1,3 @@
 outputs/
 tmp/
+__pycache__
