@@ -45,6 +45,7 @@ ml_imports = [
 ]
 
 output_suffix = ".pylint.json"
+default_pylint_text_format = "{path}:{line}:{column}: {msg_id}: {msg} ({symbol})\n"
 
 
 class Runner:
@@ -84,6 +85,7 @@ class Runner:
         time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         self.output_path = os.path.join(script_dir, "outputs", time)
         os.makedirs(self.output_path, mode=0o755)
+        self.audit_report_path = os.path.join(self.output_path, f"lint-{metamodel}.txt")
 
     def process_file(self, file_path: str):
         # Process each file individually, which will:
@@ -106,19 +108,38 @@ class Runner:
         print("Executing command:", cmd)
 
         output_location = os.path.join(self.output_path, f"{file_name}{output_suffix}")
+        #   2. Run operations on the file.
         with open(output_location, "w") as out_file:
             get_command_output(cmd, stdout=out_file)
-            # json_data = json.loads(output)
-            # print(json_data)
 
-            #   2. Run operations on the file.
-            #   2.1 Reprioritise
-            Reprioritise.exec(output_location)
+        #   2.1 Reprioritise
+        print("==== Running operation Reprioritise")
+        Reprioritise.exec(output_location)
 
-            #   2.2 Remessage
-            Remessage.exec(output_location)
+        #   2.2 Remessage
+        print("==== Running operation Remessage")
+        Remessage.exec(output_location)
 
-            #   3. Finally transform the json output to text.
+        lines: list = []
+        #   3. Finally transform the json output to text.
+        with open(output_location, "r") as json_file:
+            json_array = json.load(json_file)
+
+            lines.append(f'************* Module {json_array[0]["module"]}\n')
+            for obj in json_array:
+                lines.append(
+                    default_pylint_text_format.format(
+                        path=obj["path"],
+                        line=obj["line"],
+                        column=obj["column"],
+                        msg_id=obj["message-id"],
+                        msg=obj["message"],
+                        symbol=obj["symbol"],
+                    )
+                )
+
+        with open(self.audit_report_path, "a") as audit_report_file:
+            audit_report_file.writelines(lines)
 
     def exec(self):
 
