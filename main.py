@@ -1,6 +1,7 @@
 import os
 import sys
 import glob
+import json
 from datetime import datetime
 from shell_util import *
 
@@ -43,6 +44,7 @@ ml_imports = [
 
 output_suffix = ".pylint.json"
 
+
 class Runner:
     @staticmethod
     def is_ml_file(file_name):
@@ -77,14 +79,16 @@ class Runner:
         self.non_ml_config_path = os.path.join(dir_path, "configs/non_ml.pylintrc")
 
         script_dir = os.path.dirname(os.path.realpath(__file__))
-        time = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+        time = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         self.output_path = os.path.join(script_dir, "outputs", time)
+        os.makedirs(self.output_path, mode=0o755)
 
     def process_file(self, file_path: str):
         # Process each file individually, which will:
         #   1. run pylint on that file based upon context with JSON output.
         #   2. run operations on the file.
         #   3. finally transform the json output to text.
+        base_path, file_name = os.path.split(file_path)
 
         if self.metamodel == "non_ml":
             config_path = self.non_ml_config_path
@@ -98,10 +102,13 @@ class Runner:
                 else self.non_ml_config_path
             )
 
-        # TODO: Fix so that output goes to a file.
-        cmd = f"pylint --rcfile={config_path} -f json {file_path} > {self.output_path}{output_suffix}"
-        output = get_command_output(cmd)
-        print(output)
+        cmd = f"pylint --rcfile={config_path} -f json {file_path}"
+        with open(
+            os.path.join(self.output_path, f"{file_name}{output_suffix}"), "w"
+        ) as outfile:
+            get_command_output(cmd, stdout=outfile)
+        # json_data = json.loads(output)
+        # print(json_data)
 
     def exec(self):
 
