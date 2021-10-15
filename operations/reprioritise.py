@@ -1,11 +1,6 @@
 import json
 import sys
 
-# 1. Read file
-# 2. Parse json
-# 3. Read nested ranking configuration
-#
-
 low_priority_symbols_list = [
     "bad-indentation",
     "trailing-whitespace",
