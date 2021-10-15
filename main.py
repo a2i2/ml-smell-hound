@@ -150,34 +150,3 @@ class Runner:
         # Process each file individually.
         for f in files:
             self.process_file(f)
-
-
-# # # main execution.
-# # # Usage: python3 main.py example-src/ml.py context
-# # Outputs: pylint configuration file to use
-# def old_way():
-#     if len(sys.argv) > 1:
-#         # Classify a single file
-#         file_name = sys.argv[1]
-#         script_dir = os.path.dirname(os.path.realpath(__file__))
-#         ml_config_path = os.path.join(script_dir, "example-src/configs/ml.pylintrc")
-#         non_ml_config_path = os.path.join(
-#             script_dir, "example-src/configs/non_ml.pylintrc"
-#         )
-
-#         if len(sys.argv) > 2:
-#             mode = sys.argv[2]
-#         else:
-#             mode = "context"
-
-#         if mode == "non_ml":
-#             config_path = non_ml_config_path
-#         elif mode == "ml":
-#             config_path = ml_config_path
-#         else:
-#             # context aware
-#             config_path = (
-#                 ml_config_path if Runner.is_ml_file(file_name) else non_ml_config_path
-#             )
-
-#         print(config_path)
