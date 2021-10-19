@@ -35,8 +35,8 @@ class Reprioritise:
                 json_array.append(json_array[position])
             print("After append operations length:", len(json_array))
 
-            for position in found_positions:
-                json_array.pop(position)
+            for i, position in enumerate(found_positions):
+                json_array.pop(position - i) # compensate for number of removed warnings
             print("After pop operations length:", len(json_array))
 
         with open(input_location, 'w') as outfile:
