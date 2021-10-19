@@ -20,13 +20,13 @@ class Reprioritise:
         with open(input_location) as json_file:
             json_array = json.load(json_file)
 
-            found_positions = []
+            found_positions = set()
 
             # Print the type of json_array variable
             print("Type:", type(json_array))
             for position, obj in enumerate(json_array):
                 if obj["symbol"] in low_priority_symbols_list:
-                    found_positions.append(position)
+                    found_positions.add(position)
 
             print("found_positions", found_positions)
             print("Original length:", len(json_array))
@@ -35,9 +35,9 @@ class Reprioritise:
                 json_array.append(json_array[position])
             print("After append operations length:", len(json_array))
 
-            for i, position in enumerate(found_positions):
-                json_array.pop(position - i) # compensate for number of removed warnings
-            print("After pop operations length:", len(json_array))
+            json_array = [element for i, element in enumerate(json_array)
+                          if not i in found_positions]
+            print("After filter operations length:", len(json_array))
 
         with open(input_location, 'w') as outfile:
             json.dump(json_array, outfile, indent=4)
