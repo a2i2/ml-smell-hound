@@ -6,7 +6,12 @@ MLSmellHound is a tool that provides context-aware linting. It is based on Pylin
 
 * Bash
 * Python3
-* pylint 2.11.1 (pip install pylint)
+* Pip3
+
+Currently, the only other dependency is Pylint 2.11.1:
+```
+pip3 install -r requirements.txt
+```
 
 ## Usage
 
