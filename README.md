@@ -10,12 +10,18 @@ MLSmellHound is a tool that provides context-aware linting. It is based on Pylin
 
 ## Usage
 
+To lint all Python files in `example-src` (edit `mlsh` Bash script to run on your own project):
 ```
-# Lint all Python files in example-src (edit script to run on your own project)
 ./mlsh
 ```
 
 The script will analyse all Python files in the project directory then write the audit report to `outputs/<datetime>/lint-context.txt`
+
+To compare the results to the default Pylint output:
+```
+pylint example-src > pylint-default-output.txt
+diff pylint-default-output.txt outputs/<datetime>/lint-context.txt
+```
 
 ## Sample
 
