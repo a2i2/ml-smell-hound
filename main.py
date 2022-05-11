@@ -93,33 +93,29 @@ class Runner:
         #   1. run pylint on that file based upon context with JSON output.
         base_path, file_name = os.path.split(file_path)
 
-        if self.metamodel == "non_ml":
-            config_path = self.non_ml_config_path
-        elif self.metamodel == "ml":
+        # Context aware.
+        is_ml_context = self.metamodel == "ml" or self.metamodel == "context" and Runner.is_ml_file(file_path)
+        if is_ml_context:
             config_path = self.ml_config_path
         else:
-            # Context aware.
-            config_path = (
-                self.ml_config_path
-                if Runner.is_ml_file(file_path)
-                else self.non_ml_config_path
-            )
-
-        cmd = f"pylint --rcfile={config_path} -f json {file_path}"
-        print("Executing command:", cmd)
+            config_path = self.non_ml_config_path
+        
+        cmd = ["pylint", f"--rcfile={config_path}", "-f", "json", f"{file_path}"]
+        print("Executing command: ", " ".join(cmd))
 
         output_location = os.path.join(self.output_path, f"{file_name}{output_suffix}")
         #   2. Run operations on the file.
         with open(output_location, "w") as out_file:
             get_command_output(cmd, stdout=out_file)
 
-        #   2.1 Reprioritise
-        print("==== Running operation Reprioritise")
-        Reprioritise.exec(output_location)
+        if is_ml_context:
+            #   2.1 Reprioritise
+            print("==== Running operation Reprioritise")
+            Reprioritise.exec(output_location)
 
-        #   2.2 Remessage
-        print("==== Running operation Remessage")
-        Remessage.exec(output_location)
+            #   2.2 Remessage
+            print("==== Running operation Remessage")
+            Remessage.exec(output_location)
 
         lines: list = []
         #   3. Finally transform the json output to text.

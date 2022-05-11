@@ -13,7 +13,7 @@ class Remessage:
             json_array = json.load(json_file)
             for obj in json_array:
                 if obj["symbol"] in overriden_symbols:
-                    obj["message"] = overriden_symbols["symbol"]
+                    obj["message"] = overriden_symbols[obj["symbol"]]
 
         with open(input_location, 'w') as outfile:
             json.dump(json_array, outfile, indent=4)
