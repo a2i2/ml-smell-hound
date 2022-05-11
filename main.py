@@ -105,8 +105,8 @@ class Runner:
                 else self.non_ml_config_path
             )
 
-        cmd = f"pylint --rcfile={config_path} -f json {file_path}"
-        print("Executing command:", cmd)
+        cmd = ["pylint", f"--rcfile={config_path}", "-f", "json", f"{file_path}"]
+        print("Executing command: ", " ".join(cmd))
 
         output_location = os.path.join(self.output_path, f"{file_name}{output_suffix}")
         #   2. Run operations on the file.
